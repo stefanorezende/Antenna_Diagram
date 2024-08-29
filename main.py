@@ -67,7 +67,7 @@ def gain(diag, freq, df1,col1, df2,col2):
     fprG = float(prGdf.loc[prGdf['Frequency (Hz)']== freqInt, 'dB'])
     fprH = float(prHdf.loc[prHdf['Frequency (Hz)']== freqInt, 'dB'])
 
-    gINPE = gHorn - (sHorn - sAnt) - (fprH - fprG)
+    gINPE = gHorn - ((sHorn - sAnt) - (fprH - fprG))
     gCST = df2[col2].max()
     return gCST, gINPE
 
@@ -113,7 +113,7 @@ def plot (dfINPE, dfCST, fileName, cutAngle,corr_pearson,gCST, gINPE):
     text = 'G_cst: '+str(round(gCST,1))+' dBi'+ '\nG_inpe: '+ str(round(gINPE,1)) + ' dBi\nPearson Coef: '+str(round(corr_pearson,3))
     # plt.text( 9.5,9.5,text , fontsize=10, bbox=dict(facecolor='white', edgecolor='gray', boxstyle='round'))
     plt.text(0.8, -0.05, text, transform=ax.transAxes, fontsize=10, verticalalignment='bottom', bbox=dict(facecolor='white', edgecolor='gray', boxstyle='round'))
-    plt.text(0.05, 1, 'Freq: 18 GHz', transform=ax.transAxes, fontsize=12, verticalalignment='top', bbox=dict(facecolor='white', edgecolor='gray', boxstyle='round'))
+    plt.text(0.05, 1, 'Freq: 14 GHz', transform=ax.transAxes, fontsize=12, verticalalignment='top', bbox=dict(facecolor='white', edgecolor='gray', boxstyle='round'))
     plt.savefig('results\\'+fileName+'.png', dpi=300, bbox_inches='tight')
     plt.savefig('results\\'+fileName+'.svg', format='svg', bbox_inches='tight')
     
@@ -142,15 +142,16 @@ def plotlin(dfINPE, dfCST, fileName, cutAngle):
 
 if __name__ == "__main__":
     #PARAMETERS
-    antenna ='4A'
+    antenna ='1A'
     tx = 'V'
     diag = 'V'
-    freq = 'F18'
+    freq = 'F14'
     fileName = antenna+tx+diag+freq
     cutAngle = 'Theta' if diag == 'V' else 'Phi' # H
 
     #ROTATION
-    alphaINPE = -90
+    alphaINPE = 102
+
     # alphaCST = -90 if diag == 'H' else 90
     alphaCST = 0
 
