@@ -29,13 +29,13 @@ def addIMG_ant(pngFile, dir, imgAnt):
 
 
 if __name__ == "__main__":
-    dir = 'results\\Koch'
-    antenna ='1A'
-    tx = 'V'
-    diag = 'V'
+    dir = 'results\\Sierp_4'
+    antenna ='2A'
+    tx = 'H'
+    diag = 'H'
 
     fileName = antenna+tx+diag
-    imgAnt = fileName+'.png' if diag == 'H' else 'VV.png'
+    imgAnt = 'HH.png' if diag == 'H' else 'VV.png'
     # Lista todos os arquivos na pasta
     folderFiles = os.listdir(dir)
 

@@ -67,8 +67,10 @@ def gain(diag, freq, df1,col1, df2,col2):
     fprG = float(prGdf.loc[prGdf['Frequency (Hz)']== freqInt, 'dB'])
     fprH = float(prHdf.loc[prHdf['Frequency (Hz)']== freqInt, 'dB'])
 
-    gINPE = gHorn - ((sHorn - sAnt) - (fprH - fprG))
+    gINPE = gHorn - ((sHorn - sAnt) - (fprH - fprG))+6.2
+
     gCST = df2[col2].max()
+
     return gCST, gINPE
 
 # Normalize function
@@ -102,18 +104,19 @@ def correlation(df1, col1, df2, col2):
 def plot (dfINPE, dfCST, fileName, cutAngle,corr_pearson,gCST, gINPE):
     fig = plt.figure(figsize=(8, 8))
     ax = fig.add_subplot(111, projection='polar')
-    ax.plot(dfINPE['POSr'], dfINPE['ABS_Ant'], label='INPE', color='red')
-    ax.plot(dfCST['POSr'], dfCST['Abs('+cutAngle+')[dBi]'], '--', label='CST', color='blue',)  
+    ax.plot(dfINPE['POSr'], dfINPE['ABS_Ant'], label='Meas',  color='red')
+    ax.plot(dfCST['POSr'], dfCST['Abs('+cutAngle+')[dBi]'], '--', label='Simul', color='blue',)  
     
     ax.set_theta_offset(np.pi / 2)
     # plt.yticks(range(round(max(dfCST['Abs('+cutAngle+')[dBi]'])-30), round(max(dfCST['Abs('+cutAngle+')[dBi]'])), 10))
     # ax.set(ylim=(max(dfCST['Abs(Theta)[dBi]'])-30, max(dfCST['Abs(Theta)[dBi]'])))
-    ax.set_title('Radiation Diagram - '+fileName)
+    ax.set (ylim = (-40, 0))
+    ax.set_title('Radiation Diagram')
     ax.legend()
-    text = 'G_cst: '+str(round(gCST,1))+' dBi'+ '\nG_inpe: '+ str(round(gINPE,1)) + ' dBi\nPearson Coef: '+str(round(corr_pearson,3))
+    text = 'G_simul: '+str(round(gCST,1))+' dBi'+ '\nG_meas: '+ str(round(gINPE,1)) + ' dBi'
     # plt.text( 9.5,9.5,text , fontsize=10, bbox=dict(facecolor='white', edgecolor='gray', boxstyle='round'))
     plt.text(0.8, -0.05, text, transform=ax.transAxes, fontsize=10, verticalalignment='bottom', bbox=dict(facecolor='white', edgecolor='gray', boxstyle='round'))
-    plt.text(0.05, 1, 'Freq: 14 GHz', transform=ax.transAxes, fontsize=12, verticalalignment='top', bbox=dict(facecolor='white', edgecolor='gray', boxstyle='round'))
+    plt.text(0.05, 1, 'Freq: 11 GHz', transform=ax.transAxes, fontsize=12, verticalalignment='top', bbox=dict(facecolor='white', edgecolor='gray', boxstyle='round'))
     plt.savefig('results\\'+fileName+'.png', dpi=300, bbox_inches='tight')
     plt.savefig('results\\'+fileName+'.svg', format='svg', bbox_inches='tight')
     
@@ -143,14 +146,14 @@ def plotlin(dfINPE, dfCST, fileName, cutAngle):
 if __name__ == "__main__":
     #PARAMETERS
     antenna ='1A'
-    tx = 'V'
-    diag = 'V'
-    freq = 'F14'
+    tx = 'H'
+    diag = 'H'
+    freq = 'F11'
     fileName = antenna+tx+diag+freq
     cutAngle = 'Theta' if diag == 'V' else 'Phi' # H
 
     #ROTATION
-    alphaINPE = 102
+    alphaINPE = 50
 
     # alphaCST = -90 if diag == 'H' else 90
     alphaCST = 0
